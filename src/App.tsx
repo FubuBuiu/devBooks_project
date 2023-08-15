@@ -15,7 +15,6 @@ function App() {
           <Route path="/books/:book-id" element={<BookDetail />} />
         </Routes>
       </BrowserRouter>
-      <h1>DevBooks</h1>
     </>
   );
 }

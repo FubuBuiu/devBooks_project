@@ -2,9 +2,9 @@ import { Container } from "./SearchBox.styles";
 import { ReactComponent as SearchIcon } from "../../icons/search.svg";
 import { InputHTMLAttributes } from "react";
 
-type SearchBox = InputHTMLAttributes<HTMLInputElement>;
+type SearchBoxProps = InputHTMLAttributes<HTMLInputElement>;
 
-export function SearchBox(props: SearchBox) {
+export function SearchBox(props: SearchBoxProps) {
   return (
     <>
       <Container>

@@ -9,5 +9,6 @@ export const GlobalStyle = createGlobalStyle`
 
  #root, body{
     font: 16px Monstserrat, sans-serif;
+    background-color: white;
  }
 `;

@@ -1,20 +1,9 @@
 import { useEffect, useState } from "react";
-import { Navigate, useLocation, useSearchParams } from "react-router-dom";
+import { Link, Navigate, useLocation, useSearchParams } from "react-router-dom";
 import { googleBooksApi } from "../../services/googleBooksApi";
 import { Thumbnail } from "../../components/Thumbnail";
 import { Container, Subtitle, Title } from "./Books.styles";
-
-interface Book {
-  id: string;
-  volumeInfo: {
-    title: string;
-    subtitle: string;
-    description: string;
-    imageLinks?: {
-      thumbnail: string;
-    };
-  };
-}
+import { Book } from "../BookDetail";
 
 interface BookList {
   totalItems: number;
@@ -29,13 +18,22 @@ export function Books() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-      await googleBooksApi
-        .get(`/volumes?q=${query}&maxResults=40`)
-        .then((response) => setBooks(response.data));
-      setLoading(false);
-    })();
+    // TODO Melhorar essa lógica
+    if (query !== "" && query !== undefined && query !== null) {
+      (async () => {
+        try {
+          setLoading(true);
+          const response = await googleBooksApi.get(
+            `/volumes?q=${query}&maxResults=40`
+          );
+          setBooks(response.data);
+        } catch (error) {
+          // TODO PENSAR EM ALGUM TRATAMENTO DE ERRO
+        } finally {
+          setLoading(false);
+        }
+      })();
+    }
   }, [query]);
 
   if (!query) {
@@ -43,6 +41,7 @@ export function Books() {
   }
 
   return (
+    // TODO Colocar loading e ver se precisa simplificar a lógica
     <Container>
       {loading ? (
         <h1>CARREGANDO...</h1>
@@ -54,14 +53,16 @@ export function Books() {
               <ul>
                 {books.items.map((book) => (
                   <li key={book.id}>
-                    <Thumbnail
-                      thumbnail={book.volumeInfo.imageLinks?.thumbnail}
-                      title={book.volumeInfo.title}
-                      bachgroundColor="#d9d9d9"
-                    />
+                    <Link to={`/books/${book.id}`}>
+                      <Thumbnail
+                        thumbnail={book.volumeInfo.imageLinks?.thumbnail}
+                        title={book.volumeInfo.title}
+                        bachgroundColor="#d9d9d9"
+                      />
 
-                    <Title>{book.volumeInfo.title}</Title>
-                    <Subtitle>{book.volumeInfo.subtitle}</Subtitle>
+                      <Title>{book.volumeInfo.title}</Title>
+                      <Subtitle>{book.volumeInfo.subtitle}</Subtitle>
+                    </Link>
                   </li>
                 ))}
               </ul>

@@ -32,6 +32,14 @@ export const Container = styled.div`
   }
 `;
 
+export const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+`;
+
 const clampText = css`
   text-overflow: ellipsis;
   overflow: hidden;

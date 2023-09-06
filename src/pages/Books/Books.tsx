@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, Navigate, useLocation, useSearchParams } from "react-router-dom";
 import { googleBooksApi } from "../../services/googleBooksApi";
 import { Thumbnail } from "../../components/Thumbnail";
-import { Container, Subtitle, Title } from "./Books.styles";
+import { Container, LoadingContainer, Subtitle, Title } from "./Books.styles";
 import { Book } from "../BookDetail";
+import Lottie from "lottie-react";
+import searchingBookAnimation from "../../animations/searching_book_animation.json";
 
 interface BookList {
   totalItems: number;
@@ -41,12 +43,20 @@ export function Books() {
   }
 
   return (
-    // TODO Colocar loading e ver se precisa simplificar a lógica
-    <Container>
+    // TODO Ver se precisa simplificar a lógica
+    <>
       {loading ? (
-        <h1>CARREGANDO...</h1>
+        <LoadingContainer>
+          <Lottie
+            animationData={searchingBookAnimation}
+            loop={true}
+            style={{
+              width: "25%",
+            }}
+          />
+        </LoadingContainer>
       ) : (
-        <>
+        <Container>
           {books && (
             <>
               <h1>Resultado da sua busca</h1>
@@ -68,8 +78,8 @@ export function Books() {
               </ul>
             </>
           )}
-        </>
+        </Container>
       )}
-    </Container>
+    </>
   );
 }

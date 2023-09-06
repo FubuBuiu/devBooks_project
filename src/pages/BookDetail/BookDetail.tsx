@@ -4,8 +4,11 @@ import { googleBooksApi } from "../../services/googleBooksApi";
 import {
   BackButton,
   Container,
+  ContainerNotFound,
   Content,
   Description,
+  LoadingContainer,
+  SpinnerLoading,
   Subtitle,
   Title,
 } from "./BookDetail.styles";
@@ -39,8 +42,9 @@ export function BookDetail() {
           setBook(response.data);
         } catch (error) {
           // TODO PENSAR EM ALGUM TRATAMENTO DE ERRO
+          console.log(error);
         } finally {
-          setLoading(false);
+          setTimeout(() => setLoading(false), 200);
         }
       })();
     }
@@ -55,26 +59,40 @@ export function BookDetail() {
   return (
     <>
       {loading ? (
-        <h1>CARREGANDO...</h1>
+        <LoadingContainer>
+          <SpinnerLoading />
+        </LoadingContainer>
       ) : (
-        <Container>
-          <>
-            <BackButton onClick={goBack}>
-              <ArrowLeftIcon />
-            </BackButton>
-            <Thumbnail
-              thumbnail={book?.volumeInfo.imageLinks?.thumbnail}
-              title={book?.volumeInfo.title}
-              size="large"
-              bachgroundColor="#ef552b"
-            />
-            <Content>
-              <Title>{book?.volumeInfo.title}</Title>
-              <Subtitle>{book?.volumeInfo.subtitle}</Subtitle>
-              <Description>{book?.volumeInfo.description}</Description>
-            </Content>
-          </>
-        </Container>
+        <>
+          {book !== undefined ? (
+            <Container>
+              <>
+                <BackButton onClick={goBack}>
+                  <ArrowLeftIcon />
+                </BackButton>
+                <Thumbnail
+                  thumbnail={book.volumeInfo.imageLinks?.thumbnail}
+                  title={book.volumeInfo.title}
+                  size="large"
+                  bachgroundColor="#ef552b"
+                />
+                <Content>
+                  <Title>{book.volumeInfo.title}</Title>
+                  <Subtitle>{book.volumeInfo.subtitle}</Subtitle>
+                  <Description>{book.volumeInfo.description}</Description>
+                </Content>
+              </>
+            </Container>
+          ) : (
+            <ContainerNotFound>
+              <h1>OPS...</h1>
+              <h3>
+                Desculpe mas não conseguimos achar o seu livro. Volte e tente
+                pesquisar por outro.
+              </h3>
+            </ContainerNotFound>
+          )}
+        </>
       )}
     </>
   );
